@@ -20,12 +20,15 @@ export default function Caller({ callId }: { callId: string }) {
 
   useEffect(() => {
     const _call = client?.call("default", callId);
-    console.log("call created...");
+    // client?.connectUser();
+    console.log("call created...", _call);
     _call?.join({ create: true }).then(() => {
-      setCall(_call)
+      setCall(_call);
       console.log("you have joined to a call!!!");
       console.log("call value: ", call);
-    });
+    }).catch((e: any) => {
+      console.log("ERROR: ", e);
+    })
   }, [client, callId]);
 
   useEffect(() => {

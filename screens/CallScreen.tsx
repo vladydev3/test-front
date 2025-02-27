@@ -12,6 +12,7 @@ import { PERMISSIONS, requestMultiple } from "react-native-permissions";
 export default function CallScreen() {
   const { user, token } = useUser();
   const [permissionsGranted, setPermissionsGranted] = useState(false);
+  const [client, setClient] = useState<StreamVideoClient>();
 
   useEffect(() => {
     const requestAndUpdatePermissions = async () => {
@@ -28,16 +29,22 @@ export default function CallScreen() {
           PERMISSIONS.ANDROID.RECORD_AUDIO,
           PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
         ]);
+        console.log(results);
         if (
           results[PERMISSIONS.ANDROID.CAMERA] === "granted" &&
-          results[PERMISSIONS.ANDROID.RECORD_AUDIO] === "granted" &&
-          results[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === "granted"
+          results[PERMISSIONS.ANDROID.RECORD_AUDIO] === "granted"
         ) {
           setPermissionsGranted(true);
         }
       }
     };
     requestAndUpdatePermissions();
+    setClient(new StreamVideoClient({
+      apiKey,
+      user: streamUser,
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.RTOqUPdNd-fu-xm8H__6Uh909Kx1EoOVTvLBIYb7bnw",
+    }));
   }, []);
 
   if (!user || !token) {
@@ -48,7 +55,7 @@ export default function CallScreen() {
     );
   }
 
-  if (!permissionsGranted) {
+  if (!permissionsGranted || !client) {
     return (
       <View style={styles.container}>
         <Text>Requesting permissions...</Text>
@@ -63,16 +70,6 @@ export default function CallScreen() {
   } as User;
 
   const apiKey = "5uvmbdmkb74t";
-
-  const client = useMemo(() => {
-    console.log("Creating new StreamVideoClient with user:", streamUser);
-    return new StreamVideoClient({
-      apiKey,
-      user: streamUser,
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.RTOqUPdNd-fu-xm8H__6Uh909Kx1EoOVTvLBIYb7bnw",
-    });
-  }, [apiKey, streamUser, token]);
 
   return (
     <View style={styles.container}>

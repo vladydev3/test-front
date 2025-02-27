@@ -1,4 +1,4 @@
-package com.anonymous.testfront
+package com.vladydev.testfront
 
 import android.app.Application
 import android.content.res.Configuration
