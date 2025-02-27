@@ -9,13 +9,26 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bitcode": false
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.CAMERA",
+        "android.permission.INTERNET",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.WAKE_LOCK"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -23,6 +36,23 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "react-native-permissions",
+        {
+          "ios": {
+            "cameraPermission": "We need access to your camera for video calls",
+            "microphonePermission": "We need access to your microphone for video calls"
+          }
+        }
+      ],
+      "@stream-io/video-react-native-sdk",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "cameraPermission": "La aplicación necesita acceso a la cámara para transmitir video.",
+          "microphonePermission": "La aplicación necesita acceso al micrófono para transmitir audio."
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -32,10 +62,26 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      "@stream-io/video-react-native-sdk",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "cameraPermission": "LISN requires camera access in order to capture and transmit video",
+          "microphonePermission": "LISN requires microphone access in order to capture and transmit audio"
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b78bcb64-84a0-4553-b1f8-819f8e79f3a6"
+      }
     }
   }
 }
