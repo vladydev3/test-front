@@ -11,31 +11,50 @@ import {
   useStreamVideoClient,
 } from "@stream-io/video-react-native-sdk";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, View, Text, Button, GestureResponderEvent } from "react-native";
 
 export default function Caller({ callId }: { callId: string }) {
   const [call, setCall] = useState<Call | null>(null);
   const client = useStreamVideoClient();
-
+  const user = useUser().user
+  const token = useUser().token
   useEffect(() => {
-    const _call = client?.call("default", callId);
-    // client?.connectUser();
-    console.log("call created...", _call);
-    _call?.join({ create: true }).then(() => {
-      setCall(_call);
-      console.log("you have joined to a call!!!");
-      console.log("call value: ", call);
-    }).catch((e: any) => {
-      console.log("ERROR: ", e);
-    })
-  }, [client, callId]);
+    if (client && user && token) {
+      client.connectUser({ id: '1', name: "admin" } as User, token)
+        .then(() => {
+          console.log("User connected successfully");
+          const _call = client.call("default", callId);
+          if (_call) {
+            setCall(_call);
+            _call.join({ create: true })
+              .then(() => {
+                console.log("You have joined the call!!!");
+              })
+              .catch((e) => {
+                console.log("ERROR joining call: ", e);
+              });
+          }
+        })
+        .catch((e) => {
+          console.log("ERROR connecting user: ", e);
+        });
+    } else {
+      console.log("Client, user, or token is missing");
+    }
+  }, [client, user, token, callId]);
 
   useEffect(() => {
     return () => {
-      // cleanup the call on unmount if the call was not left already
-      if (call?.state.callingState !== CallingState.LEFT) {
-        call?.leave();
+      if (call && call.state.callingState !== CallingState.LEFT) {
+        call.leave()
+          .then(() => {
+            console.log("Call left successfully");
+            client?.disconnectUser()
+          })
+          .catch((e) => {
+            console.log("ERROR leaving call: ", e);
+          });
       }
     };
   }, [call]);
@@ -60,7 +79,8 @@ export default function Caller({ callId }: { callId: string }) {
       <View style={styles.container}>
         <CallContent
           onHangupCallHandler={goToHomeScreen}
-          />
+        />
+        <Text>Calling</Text>
       </View>
     </StreamCall>
   );
