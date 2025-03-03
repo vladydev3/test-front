@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "@/screens/HomeScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import CallScreen from "@/screens/CallScreen";
+import { ChatScreen } from "@/screens/ChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -12,7 +13,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Call" component={CallScreen} />
-      <Stack.Screen name="Chat" component={CallScreen} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
   );
 }

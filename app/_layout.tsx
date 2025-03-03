@@ -1,10 +1,13 @@
-import { Slot } from "expo-router";
+import AppNavigator from "@/navigation/AppNavigator";
 import { UserProvider } from "@/context/UserContext";
+import { ChatProvider } from "@/context/ChatProvider"; // Importa el ChatProvider
 
 export default function RootLayout() {
   return (
     <UserProvider>
-      <Slot />
+      <ChatProvider> {/* Envolvemos toda la app con el ChatProvider */}
+        <AppNavigator />
+      </ChatProvider>
     </UserProvider>
   );
 }
