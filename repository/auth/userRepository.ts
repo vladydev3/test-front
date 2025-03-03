@@ -9,6 +9,7 @@ export class UserRespository {
   }
 
   async login(loginFormData: ILoginRequest): Promise<ILoginResponse> {
+    console.log(`${this.baseUrl}/auth/login`);
     return request<ILoginResponse>(`${this.baseUrl}/auth/login`, {
       body: JSON.stringify(loginFormData),
       method: "POST",

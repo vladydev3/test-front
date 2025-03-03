@@ -16,9 +16,7 @@ import { ILoginRequest } from "@/types/auth";
 import { useRouter } from "expo-router";
 
 const LoginScreen: React.FC = () => {
-  const repository = new UserRespository(
-    process.env.EXPO_PUBLIC_API_URL as string
-  );
+  const repository = new UserRespository("http://localhost:3000");
   const userService = new AuthService(repository);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -37,11 +35,13 @@ const LoginScreen: React.FC = () => {
     };
     try {
       const response = await userService.login(loginFormData);
-      setToken(response.access_token);
+      setToken(response.streamToken);
       setUser({
         id: response.id,
         name: response.name,
       });
+
+      console.log("user object: ", response);
 
       Alert.alert("Correcto", "Inicio de sesion exitoso");
       router.replace("/")

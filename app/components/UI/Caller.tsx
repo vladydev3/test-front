@@ -21,13 +21,19 @@ export default function Caller({ callId }: { callId: string }) {
   const token = useUser().token
   useEffect(() => {
     if (client && user && token) {
-      client.connectUser({ id: '1', name: "admin" } as User, token)
+      console.log("Connecting user with token...", token);
+      client
+        .connectUser(
+          { id: user.id, name: user.name } as User,
+          token
+        )
         .then(() => {
           console.log("User connected successfully");
           const _call = client.call("default", callId);
           if (_call) {
             setCall(_call);
-            _call.join({ create: true })
+            _call
+              .join({ create: true })
               .then(() => {
                 console.log("You have joined the call!!!");
               })

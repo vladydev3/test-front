@@ -5,6 +5,7 @@ export interface ILoginRequest {
 
 export interface ILoginResponse {
   access_token: string;
+  streamToken: string;
   id: string;
   name: string;
 }

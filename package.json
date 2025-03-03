@@ -24,6 +24,7 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/stack": "^7.1.1",
+    "@stream-io/node-sdk": "^0.4.16",
     "@stream-io/react-native-webrtc": "^125.0.7",
     "@stream-io/video-react-native-sdk": "^1.10.7",
     "@tabler/icons-react-native": "^3.30.0",

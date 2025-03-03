@@ -5,15 +5,23 @@ import {
   StreamVideoClient,
   User,
 } from "@stream-io/video-react-native-sdk";
-import React, { useEffect,  useState } from "react";
-import { View, Text, StyleSheet, Platform, useWindowDimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
 import { PERMISSIONS, requestMultiple } from "react-native-permissions";
 
 export default function CallScreen() {
+  const apiKey = "5uvmbdmkb74t";
   const { user, token } = useUser();
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const [client, setClient] = useState<StreamVideoClient>();
-  const { width } = useWindowDimensions()
+  const { width } = useWindowDimensions();
+
 
   useEffect(() => {
     const requestAndUpdatePermissions = async () => {
@@ -40,13 +48,20 @@ export default function CallScreen() {
       }
     };
     requestAndUpdatePermissions();
-    setClient(
-      new StreamVideoClient({
-        apiKey,
-        user: streamUser,
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.RTOqUPdNd-fu-xm8H__6Uh909Kx1EoOVTvLBIYb7bnw",
-      })
-    );
+    const streamUser = {
+      id: user?.id || "",
+      name: user?.name || "",
+      image: `https://getstream.io/random_png/?id=${user?.id}&name=${user?.name}`,
+    } as User;
+    if (token) {
+      setClient(
+        new StreamVideoClient({
+          apiKey,
+          user: streamUser,
+          token,
+        })
+      );
+    }
   }, []);
 
   if (!user || !token) {
@@ -65,17 +80,15 @@ export default function CallScreen() {
     );
   }
 
-  const streamUser = {
-    id: "1",
-    name: 'admin',
-    image: `https://getstream.io/random_png/?id=1&name=${user.name}`,
-  } as User;
-
-  const apiKey = "5uvmbdmkb74t";
   return (
     <View style={styles.container}>
-      <StreamVideo style={{ callContent: { container: { width: width } } }} client={client}>
-        <Caller callId={`${Math.round(Math.random() * 100 + (Math.random() * 1000))}`} />
+      <StreamVideo
+        style={{ callContent: { container: { width: width } } }}
+        client={client}
+      >
+        <Caller
+          callId={`${Math.round(Math.random() * 100 + Math.random() * 1000)}`}
+        />
       </StreamVideo>
     </View>
   );
