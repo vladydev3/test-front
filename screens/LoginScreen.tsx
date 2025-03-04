@@ -16,7 +16,9 @@ import { ILoginRequest } from "@/types/auth";
 import { useRouter } from "expo-router";
 
 const LoginScreen: React.FC = () => {
-  const repository = new UserRespository("http://localhost:3000");
+  const repository = new UserRespository(
+    process.env.EXPO_PUBLIC_API_URL as string
+  );
   const userService = new AuthService(repository);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
